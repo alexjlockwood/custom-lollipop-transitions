@@ -1,17 +1,19 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.alexjlockwood.transitions.textsize.MainActivity">
+    tools:context="com.alexjlockwood.transitions.custom.MainActivity">
 
     <TextView
         android:id="@+id/hello_world"
-        android:transitionName="@string/hello_world"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/hello_world"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="@dimen/small_text_size"/>
+        android:textColor="@color/red"
+        android:textSize="@dimen/large_text_size"
+        android:transitionName="@string/hello_world"/>
 
 </RelativeLayout>

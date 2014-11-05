@@ -10,7 +10,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.alexjlockwood.transitions.textsize"
+        applicationId "com.alexjlockwood.transitions.custom"
         minSdkVersion 21
         targetSdkVersion 21
         versionCode 1

@@ -1,4 +1,4 @@
-package com.alexjlockwood.transitions.textsize;
+package com.alexjlockwood.transitions.custom;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
             //addSharedElement(pairs, findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
             addSharedElement(pairs, mText, mText.getTransitionName());
             Bundle options = ActivityOptions.makeSceneTransitionAnimation(this, pairs.toArray(new Pair[pairs.size()])).toBundle();
+            //Bundle options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
             startActivity(new Intent(this, ChildActivity.class), options);
             return true;
         }

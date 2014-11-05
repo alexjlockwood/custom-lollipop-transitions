@@ -1,4 +1,4 @@
-package com.alexjlockwood.transitions.textsize;
+package com.alexjlockwood.transitions.custom;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
