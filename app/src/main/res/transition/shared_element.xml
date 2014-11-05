@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
+    <changeBounds>
+        <targets>
+            <target android:targetName="@string/hello_world"/>
+        </targets>
+    </changeBounds>
+    <transition class="com.alexjlockwood.transitions.textsize.TextSizeTransition">
+        <targets>
+            <target android:targetName="@string/hello_world"/>
+        </targets>
+    </transition>
+</transitionSet>
