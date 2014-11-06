@@ -8,16 +8,14 @@ import android.transition.TransitionValues;
 import android.util.AttributeSet;
 import android.util.Property;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class TextSizeTransition extends Transition {
-    private static final String PROPNAME_TEXT_SIZE = "text_size_transition:size";
-
+    private static final String PROPNAME_TEXT_SIZE = "alexjlockwood:transition:textsize";
     private static final String[] TRANSITION_PROPERTIES = { PROPNAME_TEXT_SIZE };
 
-    private static final Property<TextView, Float> TEXT_SIZE =
+    private static final Property<TextView, Float> TEXT_SIZE_PROPERTY =
             new Property<TextView, Float>(Float.class, "textSize") {
                 @Override
                 public Float get(TextView textView) {
@@ -53,9 +51,8 @@ public class TextSizeTransition extends Transition {
     }
 
     private void captureValues(TransitionValues transitionValues) {
-        final View view = transitionValues.view;
-        if (view instanceof TextView) {
-            final TextView textView = (TextView) view;
+        if (transitionValues.view instanceof TextView) {
+            TextView textView = (TextView) transitionValues.view;
             transitionValues.values.put(PROPNAME_TEXT_SIZE, textView.getTextSize());
         }
     }
@@ -65,16 +62,15 @@ public class TextSizeTransition extends Transition {
         if (startValues == null || endValues == null) {
             return null;
         }
+
         Float startSize = (Float) startValues.values.get(PROPNAME_TEXT_SIZE);
         Float endSize = (Float) endValues.values.get(PROPNAME_TEXT_SIZE);
-
-        if (startSize == null || endSize == null ||
-                startSize.floatValue() == endSize.floatValue()) {
+        if (startSize == null || endSize == null || startSize.floatValue() == endSize.floatValue()) {
             return null;
         }
 
         TextView view = (TextView) endValues.view;
         view.setTextSize(TypedValue.COMPLEX_UNIT_PX, startSize);
-        return ObjectAnimator.ofFloat(view, TEXT_SIZE, startSize, endSize);
+        return ObjectAnimator.ofFloat(view, TEXT_SIZE_PROPERTY, startSize, endSize);
     }
 }

@@ -2,9 +2,10 @@ package com.alexjlockwood.transitions.custom;
 
 import android.app.Activity;
 import android.app.SharedElementCallback;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.transition.Transition;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -13,39 +14,38 @@ import android.widget.TextView;
 import java.util.List;
 
 public class ChildActivity extends Activity {
+    private static final String TAG = "ChildActivity";
 
     private final SharedElementCallback mCallback = new SharedElementCallback() {
         @Override
         public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-//            float textSize = getResources().getDimensionPixelSize(R.dimen.small_text_size);
-//            TextView textView = getTextView(sharedElements);
-//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-            TextView textView = getTextView(sharedElements);
-            textView.setTextColor(getResources().getColor(R.color.red));
+            TextView textView = (TextView) sharedElements.get(0);
+            float textSize = getResources().getDimensionPixelSize(R.dimen.small_text_size);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            textView.setTextColor(getResources().getColor(R.color.blue));
         }
 
         @Override
         public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-//            TextView textView = getTextView(sharedElements);
-//            float textSize = getResources().getDimensionPixelSize(R.dimen.large_text_size);
-//            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-//            int widthSpec = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.UNSPECIFIED, 0);
-//            int heightSpec = View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.UNSPECIFIED, 0);
-//            textView.measure(widthSpec, heightSpec);
-//            textView.layout(textView.getLeft(), textView.getTop(), textView.getLeft() + textView.getMeasuredWidth(), textView.getBottom() + textView.getMeasuredHeight());
-            TextView textView = getTextView(sharedElements);
-            textView.setTextColor(getResources().getColor(R.color.green));
-        }
-
-        private TextView getTextView(List<View> sharedElements) {
-            for (View view : sharedElements) {
-                if (view instanceof TextView) {
-                    return (TextView) view;
-                }
-            }
-            return null;
+            TextView textView = (TextView) sharedElements.get(0);
+            int oldMeasuredWidth = textView.getMeasuredWidth();
+            int oldMeasuredHeight = textView.getMeasuredHeight();
+            float textSize = getResources().getDimensionPixelSize(R.dimen.large_text_size);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            textView.measure(widthSpec, heightSpec);
+            int newMeasuredWidth = textView.getMeasuredWidth();
+            int newMeasuredHeight = textView.getMeasuredHeight();
+            int measuredWidthDiff = newMeasuredWidth - oldMeasuredWidth;
+            int measuredHeightDiff = newMeasuredHeight - oldMeasuredHeight;
+            textView.layout(textView.getLeft() - measuredWidthDiff / 2, textView.getTop() - measuredHeightDiff / 2,
+                    textView.getRight() + measuredWidthDiff / 2, textView.getBottom() + measuredHeightDiff / 2);
+            textView.setTextColor(getResources().getColor(R.color.light_blue));
         }
     };
+
+    private TextView mText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +53,21 @@ public class ChildActivity extends Activity {
         setContentView(R.layout.activity_child);
         setEnterSharedElementCallback(mCallback);
         postponeEnterTransition();
-        getWindow().getDecorView().getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+
+        mText = (TextView) findViewById(R.id.hello_world);
+        mText.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                getWindow().getDecorView().getViewTreeObserver().removeOnPreDrawListener(this);
+                mText.getViewTreeObserver().removeOnPreDrawListener(this);
                 startPostponedEnterTransition();
                 return true;
             }
         });
 
-        View actionBar = getWindow().getDecorView().findViewById(getResources().getIdentifier(
-                "action_bar_container", "id", "android"));
-
-        Transition fadeIn = new BackgroundFade(Color.RED, Color.GREEN);
-        fadeIn.addTarget(actionBar);
-        Transition fadeOut = new BackgroundFade(Color.GREEN, Color.RED);
-        fadeOut.addTarget(actionBar);
-        getWindow().setExitTransition(fadeOut);
-        getWindow().setEnterTransition(fadeIn);
+        Transition fade = new Fade();
+        fade.excludeTarget(android.R.id.navigationBarBackground, true);
+        fade.excludeTarget(android.R.id.statusBarBackground, true);
+        getWindow().setEnterTransition(fade);
     }
 
     @Override

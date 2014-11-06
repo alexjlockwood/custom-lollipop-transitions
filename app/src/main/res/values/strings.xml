@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Activity Transition Custom</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="hello_world">Hello!</string>
     <string name="title_activity_child">ChildActivity</string>
 
 </resources>

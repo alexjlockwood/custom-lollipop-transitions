@@ -13,6 +13,7 @@ import java.util.List;
 
 
 public class MainActivity extends Activity {
+    private static final String TAG = "MainActivity";
 
     private View mText;
 
@@ -27,11 +28,8 @@ public class MainActivity extends Activity {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getActionMasked() == MotionEvent.ACTION_UP) {
             List<Pair<View, String>> pairs = new ArrayList<>();
-            //addSharedElement(pairs, findViewById(android.R.id.navigationBarBackground), Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME);
-            //addSharedElement(pairs, findViewById(android.R.id.statusBarBackground), Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME);
             addSharedElement(pairs, mText, mText.getTransitionName());
             Bundle options = ActivityOptions.makeSceneTransitionAnimation(this, pairs.toArray(new Pair[pairs.size()])).toBundle();
-            //Bundle options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle();
             startActivity(new Intent(this, ChildActivity.class), options);
             return true;
         }
