@@ -15,7 +15,27 @@ import java.util.List;
 public class ChildActivity extends Activity {
     private static final String TAG = "ChildActivity";
 
-    private final SharedElementCallback mCallback = new SharedElementCallback() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_child);
+        setEnterSharedElementCallback(new EnterSharedElementCallback());
+        Transition fade = new Fade();
+        fade.excludeTarget(android.R.id.navigationBarBackground, true);
+        fade.excludeTarget(android.R.id.statusBarBackground, true);
+        getWindow().setEnterTransition(fade);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
+            finishAfterTransition();
+            return true;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    private class EnterSharedElementCallback extends SharedElementCallback {
         @Override
         public void onSharedElementStart(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
             TextView textView = (TextView) sharedElements.get(0);
@@ -42,25 +62,5 @@ public class ChildActivity extends Activity {
                     textView.getRight() + measuredWidthDiff / 2, textView.getBottom() + measuredHeightDiff / 2);
             textView.setTextColor(getResources().getColor(R.color.light_blue));
         }
-    };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child);
-        setEnterSharedElementCallback(mCallback);
-        Transition fade = new Fade();
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
-        fade.excludeTarget(android.R.id.statusBarBackground, true);
-        getWindow().setEnterTransition(fade);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getActionMasked() == MotionEvent.ACTION_UP) {
-            finishAfterTransition();
-            return true;
-        }
-        return super.onTouchEvent(event);
     }
 }
