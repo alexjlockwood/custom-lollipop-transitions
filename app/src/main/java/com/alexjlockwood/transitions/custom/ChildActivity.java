@@ -8,7 +8,6 @@ import android.transition.Transition;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import java.util.List;
@@ -45,25 +44,11 @@ public class ChildActivity extends Activity {
         }
     };
 
-    private TextView mText;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_child);
         setEnterSharedElementCallback(mCallback);
-        postponeEnterTransition();
-
-        mText = (TextView) findViewById(R.id.hello_world);
-        mText.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                mText.getViewTreeObserver().removeOnPreDrawListener(this);
-                startPostponedEnterTransition();
-                return true;
-            }
-        });
-
         Transition fade = new Fade();
         fade.excludeTarget(android.R.id.navigationBarBackground, true);
         fade.excludeTarget(android.R.id.statusBarBackground, true);
