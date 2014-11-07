@@ -23,12 +23,12 @@ android {
 
     productFlavors {
         activity {
-            applicationId "com.alexjlockwood.transitions.custom"
+            applicationId "com.alexjlockwood.transitions.custom.activity"
             versionCode 1
             versionName "1.0"
         }
         fragment {
-            applicationId "com.alexjlockwood.transitions.custom"
+            applicationId "com.alexjlockwood.transitions.custom.fragment"
             versionCode 1
             versionName "1.0"
         }

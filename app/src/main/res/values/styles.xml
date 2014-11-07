@@ -1,6 +1,0 @@
-<resources>
-    <style name="AppTheme" parent="android:Theme.Material.Light">
-        <item name="android:windowSharedElementEnterTransition">@transition/shared_element</item>
-        <item name="android:windowSharedElementReturnTransition">@transition/shared_element</item>
-    </style>
-</resources>
