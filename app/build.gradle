@@ -23,6 +23,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        activity {
+            versionCode 1
+        }
+        fragment {
+            versionCode 1
+        }
+    }
 }
 
 dependencies {

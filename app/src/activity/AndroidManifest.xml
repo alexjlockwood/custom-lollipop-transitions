@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.alexjlockwood.transitions.custom">
+
+    <application>
+        <!-- We declare a second "child activity" here for the activity product flavor.
+             This activity attribute will be merged into the main AndroidManifest.xml file
+             at build time. -->
+        <activity
+            android:name=".MainActivity$ChildActivity"
+            android:label="@string/title_activity_child">
+        </activity>
+    </application>
+
+</manifest>

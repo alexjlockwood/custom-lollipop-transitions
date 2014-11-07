@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Activity Transition Custom</string>
+    <string name="app_name">Activity Transitions Custom</string>
     <string name="hello_world">Hello!</string>
-    <string name="title_activity_child">ChildActivity</string>
+    <string name="title_activity_child">Child Activity</string>
 
 </resources>
