@@ -21,6 +21,9 @@ android {
         }
     }
 
+    // There are two product flavors: one uses activity transitions and the other
+    // uses fragment transitions. Note that the fragment transitions example is
+    // currently broken due to a possible bug in the framework (?).
     productFlavors {
         activity {
             applicationId "com.alexjlockwood.transitions.custom.activity"
