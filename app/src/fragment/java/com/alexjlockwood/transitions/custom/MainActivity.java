@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.SharedElementCallback;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +14,24 @@ import java.util.List;
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
 
+    private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
+    private static final String CHILD_FRAGMENT_TAG = "child_fragment_tag";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().add(android.R.id.content, new MainFragment()).commit();
+            getFragmentManager().beginTransaction().add(android.R.id.content, new MainFragment(), MAIN_FRAGMENT_TAG).commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        ChildFragment child = (ChildFragment) getFragmentManager().findFragmentByTag(CHILD_FRAGMENT_TAG);
+        if (child != null) {
+            child.onBackPressed();
+        }
+        super.onBackPressed();
     }
 
     public static class MainFragment extends Fragment implements View.OnClickListener {
@@ -39,34 +50,35 @@ public class MainActivity extends Activity {
         @Override
         public void onClick(View v) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
-            ft.replace(android.R.id.content, ChildFragment.newInstance(getActivity()));
+            ChildFragment child = new ChildFragment();
+            child.setSharedElementEnterTransition(TransitionUtils.makeSharedElementEnterTransition(getActivity()));
+            child.setEnterSharedElementCallback(new EnterSharedElementCallback(getActivity()));
+            ft.replace(android.R.id.content, child, CHILD_FRAGMENT_TAG);
             ft.addSharedElement(mSharedElement, mSharedElement.getTransitionName());
             ft.addToBackStack(null);
             ft.commit();
         }
     }
 
-    // TODO: figure out why the return transition breaks after an orientation change in the child fragment.
     public static class ChildFragment extends Fragment implements View.OnClickListener {
         private static final String TAG = "ChildFragment";
-
-        public static ChildFragment newInstance(Context context) {
-            ChildFragment frag = new ChildFragment();
-            frag.setSharedElementEnterTransition(TransitionUtils.makeSharedElementEnterTransition(context));
-            frag.setEnterSharedElementCallback(new EnterSharedElementCallback(context));
-            return frag;
-        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.end_scene, container, false);
             view.setOnClickListener(this);
+            setSharedElementEnterTransition(TransitionUtils.makeSharedElementEnterTransition(getActivity()));
+            setEnterSharedElementCallback(new EnterSharedElementCallback(getActivity()));
             return view;
         }
 
-        // TODO: make sure this also works when the back button is pressed!
         @Override
         public void onClick(View v) {
+            onBackPressed();
+            getFragmentManager().popBackStackImmediate();
+        }
+
+        public void onBackPressed() {
             // For whatever reason, the start/end methods are not called in the same order as
             // with Activity Transitions, so we need to set a new shared element callback here
             // and invert the order ourselves.
@@ -82,7 +94,6 @@ public class MainActivity extends Activity {
                     enterCallback.onSharedElementStart(sharedElementNames, sharedElements, sharedElementSnapshots);
                 }
             });
-            getFragmentManager().popBackStackImmediate();
         }
     }
 }
