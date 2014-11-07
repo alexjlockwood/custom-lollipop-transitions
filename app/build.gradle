@@ -10,11 +10,8 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.alexjlockwood.transitions.custom"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0"
     }
 
     buildTypes {
@@ -26,10 +23,14 @@ android {
 
     productFlavors {
         activity {
+            applicationId "com.alexjlockwood.transitions.custom"
             versionCode 1
+            versionName "1.0"
         }
         fragment {
+            applicationId "com.alexjlockwood.transitions.custom"
             versionCode 1
+            versionName "1.0"
         }
     }
 }

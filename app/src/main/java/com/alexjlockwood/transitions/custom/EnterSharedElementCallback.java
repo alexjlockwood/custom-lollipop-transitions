@@ -59,7 +59,7 @@ public class EnterSharedElementCallback extends SharedElementCallback {
         int newWidth = textView.getMeasuredWidth();
         int newHeight = textView.getMeasuredHeight();
 
-        // Layout the TextView in the center of its container.
+        // Layout the TextView in the center of its container, accounting for its new width/height.
         int widthDiff = newWidth - oldWidth;
         int heightDiff = newHeight - oldHeight;
         textView.layout(textView.getLeft() - widthDiff / 2, textView.getTop() - heightDiff / 2,
